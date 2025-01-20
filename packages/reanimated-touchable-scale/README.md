@@ -3,6 +3,36 @@
 Smooth and perfomant scale up/down animation for your React Native pressable components.
 Built with [Reanimated](https://docs.swmansion.com/react-native-reanimated/docs) and [Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs).
 
+
+https://github.com/user-attachments/assets/8478b06e-6686-4679-a57c-7b392ecda5c3
+
+## Features
+
+### 🚀 Performance First
+- Runs animations on the UI thread using Reanimated worklets
+- Zero bridge traffic during animations
+- Smooth 60+ FPS animations even during heavy bridge load
+
+### 🎯 Purposefully Built
+- Specifically designed for scale animations on touch
+- Optimized spring configurations for natural feeling feedback
+- Works great for buttons, cards, and any pressable components really
+
+### 💪 Production Ready
+- Built on stable primitives (Reanimated + Gesture Handler)
+- Handles edge cases like rapid taps and interrupted gestures
+- TypeScript support
+- Supports both Old and New Architecture, iOS and Android
+
+### 🎨 Highly Customizable
+- Configurable scale values and spring animations
+- Supports both JS and UI thread event handlers
+
+### 🪶 Lightweight
+- Few dependencies (only Reanimated and Gesture Handler)
+- Small implementation (~150 lines of code)
+- No external assets or resources
+
 ## Installation
 
 ```sh
