@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "reanimated-touchable-scale",
-    "slug": "reanimated-touchable-scale",
+    "name": "reanimated-touchable-scale-example-new-arch",
+    "slug": "reanimated-touchable-scale-example-new-arch",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,13 +13,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "reanimated.touchable.scale.example.new.arch"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "reanimated.touchable.scale.example.new.arch"
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -1,0 +1,22 @@
+{
+  "name": "reanimated-touchable-scale",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "exports": "./build/index.js",
+  "packageManager": "yarn@4.6.0",
+  "scripts": {
+    "prepare": "expo-module prepare",
+    "clean": "expo-module clean",
+    "dev": "expo-module build -w",
+    "build": "expo-module build",
+    "ts": "expo-module typecheck"
+  },
+  "devDependencies": {
+    "expo-module-scripts": "^4.0.3",
+    "typescript": "*"
+  },
+  "peerDependencies": {
+    "react-native-gesture-handler": "^2.22.0",
+    "react-native-reanimated": "^3.16.7"
+  }
+}
