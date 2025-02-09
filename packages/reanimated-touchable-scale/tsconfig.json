@@ -3,7 +3,8 @@
   "compilerOptions": {
     "strict": true,
     "outDir": "./build",
-    "jsx": "react-native"
+    "jsx": "react-native",
+    "moduleResolution": "node"
   },
   "include": ["./src/**/*.ts", "./src/**/*.tsx"]
 }
