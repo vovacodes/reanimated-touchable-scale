@@ -9,6 +9,7 @@
     ]
   },
   "resolutions": {
+    "react": "18.3.1",
     "typescript": "5.7.3"
   },
   "devDependencies": {

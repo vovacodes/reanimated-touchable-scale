@@ -1,5 +1,4 @@
-import { ReactNode, useMemo } from "react";
-import { StyleProp, ViewStyle } from "react-native";
+import { ComponentProps, ReactNode } from "react";
 import {
   PureNativeButton,
   State,
@@ -36,8 +35,14 @@ export const defaultSpringPress = {
   velocity: -0.5,
 };
 
+type AnimatedTouchableScaleProps = Omit<
+  ComponentProps<typeof AnimatedPureNativeButton>,
+  "onPressIn" | "onPressOut" | "onPress"
+>;
+
 export function TouchableScale({
   children,
+  disabled,
   pressedScale = 0.98,
   springPress = defaultSpringPress,
   springRelease = defaultSpringRelease,
@@ -48,65 +53,54 @@ export function TouchableScale({
   onPressWorklet,
   onPress,
   style,
-}: {
+  ...props
+}: AnimatedTouchableScaleProps & {
   children: ReactNode;
+  disabled?: boolean;
   pressedScale?: number;
   springPress?: SpringConfig;
   springRelease?: SpringConfig;
-  /**
-   * Currently this can be called twice due to this bug https://github.com/software-mansion/react-native-gesture-handler/pull/3343
-   */
   onPressInWorklet?: () => void;
   onPressIn?: () => void;
-  /**
-   * Currently this can be called twice due to this bug https://github.com/software-mansion/react-native-gesture-handler/pull/3343
-   */
   onPressOutWorklet?: () => void;
   onPressOut?: () => void;
-  /**
-   * Currently this can be called twice due to this bug https://github.com/software-mansion/react-native-gesture-handler/pull/3343
-   */
   onPressWorklet?: () => void;
   onPress?: () => void;
-  style?: StyleProp<ViewStyle>;
 }) {
   const scale = useSharedValue(1);
-
-  // TODO: remove throttling when https://github.com/software-mansion/react-native-gesture-handler/pull/3343 is merged
-  const handlePressIn = useMemo(() => {
-    return onPressIn ? throttle(onPressIn) : undefined;
-  }, [onPressIn]);
-  const handlePressOut = useMemo(() => {
-    return onPressOut ? throttle(onPressOut) : undefined;
-  }, [onPressOut]);
-  const handlePress = useMemo(() => {
-    return onPress ? throttle(onPress) : undefined;
-  }, [onPress]);
 
   const handleGestureHandlerStateChange = useGestureHandlerStateChangeHandler(
     {
       onHandlerStateChange(event) {
         "worklet";
+        if (disabled) return;
+
         if (event.state === State.ACTIVE) {
           scale.value = withSpring(pressedScale, springPress);
           onPressInWorklet?.();
-          if (handlePressIn) runOnJS(handlePressIn)();
+          if (onPressIn) runOnJS(onPressIn)();
         } else if (event.state === State.END) {
           scale.value = withSpring(1, springRelease);
           onPressOutWorklet?.();
-          if (handlePressOut) runOnJS(handlePressOut)();
+          if (onPressOut) runOnJS(onPressOut)();
           onPressWorklet?.();
-          if (handlePress) runOnJS(handlePress)();
+          if (onPress) runOnJS(onPress)();
+        } else if (event.state === State.CANCELLED) {
+          scale.value = withSpring(1, springRelease);
         }
       },
     },
     [
+      disabled,
       pressedScale,
       springPress,
       springRelease,
       onPressInWorklet,
+      onPressIn,
       onPressOutWorklet,
+      onPressOut,
       onPressWorklet,
+      onPress,
     ],
   );
 
@@ -118,6 +112,7 @@ export function TouchableScale({
 
   return (
     <AnimatedPureNativeButton
+      {...props}
       onHandlerStateChange={handleGestureHandlerStateChange}
       style={[style, animatedStyle]}
     >
@@ -198,19 +193,3 @@ export type SpringConfig = {
       clamp?: { min?: number; max?: number };
     }
 );
-
-function throttle<T extends (...args: any[]) => any>(
-  fn: T,
-): (...args: Parameters<T>) => ReturnType<T> | void {
-  let scheduled = false;
-  return function (this: any, ...args: Parameters<T>): ReturnType<T> | void {
-    if (scheduled) return;
-
-    scheduled = true;
-    setTimeout(() => {
-      scheduled = false;
-    }, 10);
-
-    return fn.apply(this, args);
-  };
-}
